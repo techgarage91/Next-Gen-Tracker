@@ -1,0 +1,44 @@
+{
+  "summary": "Full backend regression via pytest (25/25 passing) + comprehensive UI e2e via Playwright on the demo tenant. Every endpoint listed in the review request and every data-testid flow was exercised.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "CORS", "issue": "CORS is configured with allow_origins=['*'] AND allow_credentials=False, while login also sets an httpOnly cookie. Cookie-based auth from a different origin will not work; only Bearer works. Acceptable because frontend uses Bearer tg_token, but the cookie fallback is dead code cross-origin."},
+      {"endpoint": "/api/auth/register", "issue": "No lockout / rate-limit and no password strength beyond min_length=6 (explicitly OK per spec, listed only for awareness)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Settings > Currency select", "issues": ["React hydration warning: <span> rendered as child of <option>. Cosmetic (visualEditor wrappers on option content). Not user-visible but pollutes console."]},
+      {"screen": "Job detail — SMS on jobs with no contact", "issues": ["Backend correctly returns 400 'No customer contact number'; frontend logs it as a resource 400 in console. Consider surfacing a toast so users understand why SMS didn't send (currently only a resource error is emitted)."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional: fix React hydration warning in Settings by removing the visual-editor <span> wrapper inside <option> tags for the currency <select>.",
+    "Optional: show a user-facing toast (error, not silent 400) when POSTing /api/sms/send returns 400 (e.g. missing contact number)."
+  ],
+  "critical_code_review_comments": [
+    "server.py mixes cookie + Bearer auth but CORS has allow_credentials=False, so cookies are effectively unused across origins — either drop set_cookie or enable credentials with explicit origins.",
+    "All routes correctly scope by shop_id and clean() strips mongo _id — good.",
+    "SMS simulation returns simulated:true — matches spec.",
+    "Duplicate email register returns 400 (spec) — verified.",
+    "Wrong password returns 401 (spec) — verified.",
+    "Multi-tenant isolation verified: new account sees 0 jobs and dashboard total_jobs=0."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "100% (25/25)", "frontend": "100% of listed flows"},
+  "test_credentials": "demo@techgarage.app / Demo@1234 (seeded on startup)",
+  "seed_data_creation": "Registered several ephemeral tenants (test_*@example.com) for isolation/catalog/change-password tests; created TEST_ products and jobs on demo tenant and cleaned some up. Demo tenant now has ~66 jobs (added one via UI, one via API create/delete cycle).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "backend_test.py uses @example.com (not .test which pydantic email-validator rejects as reserved TLD). Currency select is native <select>, use page.select_option, not click+dropdown. Brand/Model in New Job modal are also native <select>. Login stores token in localStorage 'tg_token' and sends Bearer.",
+  "rca of the issue": "No blocking issues. Two cosmetic notes: (1) hydration warning caused by visual-editor <span> wrapper inside <option> in Settings.js currency select; (2) SMS 400 for jobs without contacts is correct backend behavior but the frontend does not surface a toast, so it shows as a silent console 400."
+}
