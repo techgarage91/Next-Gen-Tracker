@@ -56,7 +56,7 @@ export default function Settings() {
         <div className="max-w-xs">
           <Label>Display Currency</Label>
           <Select value={f.currency || "INR"} onChange={(e) => set("currency", e.target.value)} data-testid="set-currency">
-            {currencies.map((c) => <option key={c.code} value={c.code}>{c.symbol} · {c.name} ({c.code})</option>)}
+            {currencies.map((c) => <option key={c.code} value={c.code}>{`${c.symbol} · ${c.name} (${c.code})`}</option>)}
           </Select>
         </div>
       </Card>
