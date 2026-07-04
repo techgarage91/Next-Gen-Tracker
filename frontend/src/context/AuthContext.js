@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try { await api.post("/auth/logout"); } catch {}
+   try { await api.post("/auth/logout"); } catch (e) { console.warn("logout request failed", e); }
     localStorage.removeItem("tg_token");
     setUser(null);
     setShop(null);
