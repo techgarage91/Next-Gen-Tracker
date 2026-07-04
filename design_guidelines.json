@@ -1,0 +1,158 @@
+{
+  "project_name": "TechGarage",
+  "theme": {
+    "mode": "dark",
+    "archetype": "Archetype 7 (Electric & Neon) + Archetype 5 (Luxury/Premium)",
+    "description": "Cyber-Premium. A high-end 'Command Center' aesthetic. Deep matte black surfaces cut by laser-precise neon accents. It feels expensive, highly technical, and built for speed. No generic 'Vercel' look."
+  },
+  "colors": {
+    "background": {
+      "base": "#050505",
+      "surface": "#0A0A0C",
+      "surface_elevated": "#121216",
+      "glass": "rgba(10, 10, 12, 0.6)"
+    },
+    "border": {
+      "default": "#1E1E24",
+      "focus": "#00F0FF",
+      "glass": "rgba(255, 255, 255, 0.08)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#52525B",
+      "inverse": "#050505"
+    },
+    "accent": {
+      "primary": "#00F0FF",
+      "primary_hover": "#4DFFFF",
+      "secondary": "#CCFF00",
+      "glow": "rgba(0, 240, 255, 0.5)"
+    },
+    "status": {
+      "success": "#00FF66",
+      "warning": "#FFB800",
+      "error": "#FF2A2A",
+      "info": "#00F0FF"
+    },
+    "rules": [
+      "No pure #000000. Base is slightly tinted with blue/purple #050505.",
+      "Neon colors (Cyan, Volt Yellow) are used ONLY for critical data, interactions, or 'Tracing Beam' borders. Never as large background fills.",
+      "Gradients are strictly prohibited for backgrounds. Use pure matte surfaces."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Unbounded', sans-serif",
+      "body": "'Manrope', sans-serif",
+      "data_and_labels": "'JetBrains Mono', monospace"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl tracking-tighter font-black leading-none",
+      "h2": "text-3xl sm:text-4xl tracking-tight font-bold leading-tight",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "body": "text-base leading-relaxed text-secondary",
+      "overline": "text-xs font-bold tracking-[0.2em] uppercase text-accent-secondary font-mono",
+      "data_value": "text-lg font-mono text-primary",
+      "data_label": "text-xs font-mono text-muted uppercase tracking-wider"
+    },
+    "rules": [
+      "Never use Inter, Roboto, or standard sans for headings. Unbounded gives the futuristic/technical vibe.",
+      "Use JetBrains Mono for ALL monetary values, IMEI numbers, barcodes, and technical specs.",
+      "Always apply tracking-tighter to Unbounded headings > 32px."
+    ]
+  },
+  "spacing_and_layout": {
+    "landing_page": {
+      "grid_mode": "Tetris Grid",
+      "spacing": "Generous (gap-8 to gap-16, py-24 to py-32)",
+      "alignment": "Aggressive asymmetry. Overlap images with text blocks."
+    },
+    "dashboard": {
+      "grid_mode": "Control Room Grid",
+      "spacing": "Tight, dense (gap-4, p-4 or p-6 per card)",
+      "alignment": "Strict geometric alignment. Every pixel utilized. No jagged bottoms."
+    },
+    "rules": [
+      "Use subgrid where necessary to align inner elements of cards.",
+      "Padding inside bordered containers must be generous enough (p-6) to prevent text collision."
+    ]
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-accent-primary text-black font-bold uppercase tracking-wide rounded-none border border-accent-primary hover:bg-accent-primary_hover transition-colors shadow-[0_0_15px_rgba(0,240,255,0.3)]",
+      "secondary": "bg-transparent text-primary font-bold border border-border rounded-none hover:border-accent-secondary hover:text-accent-secondary transition-colors font-mono uppercase text-sm",
+      "ghost": "text-secondary hover:text-primary transition-colors bg-transparent hover:bg-surface_elevated"
+    },
+    "cards": {
+      "dashboard_widget": "bg-surface border border-border rounded-none p-6 flex flex-col gap-4 hover:border-border/80 transition-colors",
+      "pricing_tier": "relative bg-surface_elevated border border-border p-8 rounded-none. The 'Pro' tier MUST feature a 'Tracing Beam' glowing border effect using framer-motion."
+    },
+    "navigation": {
+      "style": "Crystal Glassmorphism",
+      "classes": "fixed top-0 w-full z-50 backdrop-blur-xl bg-background/60 border-b border-border/50",
+      "behavior": "Sticky. Must not obscure content below (ensure body has pt-20 or similar)."
+    },
+    "forms_and_inputs": {
+      "style": "Technical/Terminal",
+      "classes": "bg-background border-border border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:border-accent-primary focus:ring-0 text-primary font-mono transition-colors",
+      "labels": "text-xs font-mono uppercase tracking-widest text-secondary mb-2 block"
+    },
+    "tables": {
+      "style": "Borderless Data",
+      "header": "text-xs font-mono text-muted uppercase tracking-wider border-b border-border pb-4",
+      "row": "border-b border-border/30 hover:bg-surface_elevated/50 transition-colors cursor-pointer",
+      "cell": "py-4 text-sm font-mono text-secondary"
+    },
+    "badges": {
+      "style": "1px solid stroke with transparent background",
+      "success": "border border-status-success text-status-success px-2 py-1 text-xs font-mono uppercase",
+      "warning": "border border-status-warning text-status-warning px-2 py-1 text-xs font-mono uppercase",
+      "error": "border border-status-error text-status-error px-2 py-1 text-xs font-mono uppercase"
+    }
+  },
+  "motion_and_interactions": {
+    "hover": "Text color changes explicitly on hover. Elements translate-y-[-2px] strictly where applicable.",
+    "transitions": "transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",
+    "landing_animations": "Use staggered fade-ins and parallax scrolling (framer-motion or similar).",
+    "dashboard_animations": "Keep it snappy. Micro-interactions only. 150ms durations."
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1546146477-15a587cd3fcb",
+      "description": "Dark abstract technology/neon structure. Use as a low-opacity, black-tinted background for the hero section.",
+      "overlay": "bg-black/70"
+    },
+    "feature_precision": {
+      "url": "https://images.pexels.com/photos/7447036/pexels-photo-7447036.jpeg",
+      "description": "Macro shot of a technician soldering. Use in the 'Features' or 'Why TechGarage' section on the landing page."
+    },
+    "context_store": {
+      "url": "https://images.pexels.com/photos/11297769/pexels-photo-11297769.jpeg",
+      "description": "Modern sleek tech store interior. Good for the 'For Modern Repair Shops' narrative section."
+    },
+    "rules": [
+      "Hero image must have a heavy dark overlay (bg-black/70 or gradient) so the neon cyan and volt yellow text remains highly legible.",
+      "Do not use generic vector illustrations. Stick to the photography provided above."
+    ]
+  },
+  "icons": {
+    "library": "@phosphor-icons/react",
+    "weight": "duotone",
+    "rules": "Use duotone to match the 'neon/cyber' aesthetic (one layer bright, one layer dim)."
+  },
+  "accessibility_and_testing": {
+    "contrast": "Ensure minimum 4.5:1 for standard text. Text over the dark background is #FAFAFA, ensuring maximum APCA readability.",
+    "testing": "All interactive and key informational elements MUST include a 'data-testid' attribute using kebab-case role-based naming (e.g., data-testid='submit-repair-job-btn', data-testid='revenue-kpi-value')."
+  },
+  "instructions_to_main_agent": [
+    "1. Setup Tailwind config with the exact colors and fonts provided. Do NOT use default colors like 'blue-500'.",
+    "2. Add Google Fonts: Unbounded, Manrope, JetBrains Mono.",
+    "3. Landing Page: Implement a high-impact Hero with the provided background image. Use the 'Tracing Beam' effect on the Pro Pricing card.",
+    "4. Dashboard: Create a dense, 'Control Room' grid layout. Use JetBrains Mono exclusively for all stats, IMEI, and pricing data.",
+    "5. Use Phosphor Icons (duotone weight) to complement the techy vibe.",
+    "6. Build Shadcn components but STRIP AWAY the 'Vercel-look'. Force square corners (rounded-none), pure matte backgrounds, and high-contrast borders.",
+    "7. Include robust `data-testid` tags on all actionable elements and KPI data points.",
+    "8. Ensure the transition between the Landing Page (marketing) and Dashboard (app) feels like stepping into a premium operating system."
+  ]
+}
