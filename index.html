@@ -277,7 +277,7 @@ table{min-width:900px}
   .j-br,.j-no,.j-dt,.j-est{text-align:right}
   .modal-bg{align-items:flex-end;padding-top:0}
   .modal{width:100vw;max-height:90vh;border-radius:18px 18px 0 0;padding:18px 14px}
-  .cs-dd,.prob-dd{position:fixed;left:10px;right:10px;top:auto;bottom:76px;max-height:58vh}
+  .cs-dd,.prob-dd{position:absolute;left:0;right:0;top:calc(100% + 4px);bottom:auto;max-height:52vh}
   .prob-dd{max-height:58vh}
   #scan-ov{align-items:flex-end}.scan-box{width:100vw;border-radius:18px 18px 0 0}
 }
@@ -291,6 +291,7 @@ table{min-width:900px}
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style id="tg-pro">
 /* ════════════════════════════════════════════════════════════════
    TECH GARAGE — PRO THEME  (premium SaaS design system)
@@ -657,7 +658,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 </head>
 <body>
 <nav>
-  <span class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span><span class="logo-text"><em>TECH</em> GARAGE</span></span>
+  <span class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span><span class="logo-text" id="brand-name">Repair Tracker</span></span>
   <button class="nav-btn active" onclick="go('dashboard')" aria-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg><span>Dashboard</span></button>
   <button class="nav-btn" onclick="openNewJob()" aria-label="New Job"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg><span>New Job</span></button>
   <button class="nav-btn" onclick="go('jobList');renderList()" aria-label="All Jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>All Jobs</span></button>
@@ -675,7 +676,6 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="set-grid">
       <button class="set-card" onclick="closeModal('settings-modal');openWASettings()"><div class="si">💬</div><div class="st">WhatsApp Messages</div><small>Edit the message templates sent to customers</small></button>
       <button class="set-card" onclick="closeModal('settings-modal');openManageLists()"><div class="si">📱</div><div class="st">Models &amp; Problems</div><small>Manage brands, models, problems &amp; parts</small></button>
-      <button class="set-card" onclick="closeModal('settings-modal');openShopSettings()"><div class="si">🏪</div><div class="st">Shop Info</div><small>Name, address, phone, footer &amp; sync URL</small></button>
       <button class="set-card" onclick="closeModal('settings-modal');openTicketSettings()"><div class="si">🧾</div><div class="st">Edit Ticket</div><small>Customize what prints on the repair ticket</small></button>
       <button class="set-card" onclick="closeModal('settings-modal');openBackup()"><div class="si">💾</div><div class="st">Backup &amp; Restore</div><small>Save or restore ALL your data to a file</small></button>
     </div>
@@ -707,6 +707,10 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <input type="text" id="tk-thanks" placeholder="Thank you for choosing {shop}!">
     <label class="fl" style="margin-top:10px">Terms / Extra note (optional)</label>
     <textarea id="tk-terms" rows="2" placeholder="e.g. 7-day service warranty · Goods once sold..."></textarea>
+    <div class="card-title" style="margin:16px 0 6px">Shop details (printed on the ticket header)</div>
+    <div class="form-row"><div><label class="fl">Shop Name</label><input type="text" id="tk-shop" placeholder="Tech Garage"></div><div><label class="fl">Contact</label><input type="text" id="tk-contact" placeholder="+91 98765 43210"></div></div>
+    <div style="margin-top:8px"><label class="fl">Address</label><textarea id="tk-address" rows="2" placeholder="Shop address..."></textarea></div>
+    <div style="margin-top:8px"><label class="fl">GST / Reg No (optional)</label><input type="text" id="tk-gst" placeholder="GSTIN..."></div>
     <div class="btn-row" style="margin-top:16px"><button class="btn btn-pr" onclick="saveTicketSettings()">💾 Save</button><button class="btn btn-ol" onclick="previewTicket()">👁 Preview</button><button class="btn btn-gh" onclick="closeModal('ticket-modal')">Cancel</button></div>
   </div>
 </div>
@@ -724,7 +728,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 </div>
 <!-- PROFILE MENU -->
 <div id="profile-menu">
-  <div class="pf-head"><div class="pf-name">Repair Tracker</div><div class="pf-sub" id="pf-sub">Signed in</div></div>
+  <div class="pf-head"><div class="pf-name" id="pf-name">Repair Tracker</div><div class="pf-sub" id="pf-sub">Signed in</div></div>
   <div class="pf-item" onclick="openChangePass()">🔒&nbsp; Change Password</div>
   <div class="pf-item danger" onclick="doLogout()">⎋&nbsp; Log out</div>
 </div>
@@ -741,6 +745,34 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   </div>
 </div>
 <div id="photo-lightbox" onclick="this.classList.remove('open')"><img id="photo-lightbox-img" src="" alt="device photo"></div>
+<style>.pos-row{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--light)}.pos-row:last-child{border-bottom:none}.pos-row input{min-height:34px}</style>
+<div class="modal-bg" id="pos-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('pos-modal')">✕</button>
+    <h3>🛒 New Sale</h3>
+    <input type="text" id="pos-scan" placeholder="🔫 Scan barcode or type name, then Enter" onkeydown="posScanEnter(event)" style="margin-bottom:10px">
+    <div id="pos-cart" style="max-height:36vh;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-bottom:12px"></div>
+    <div class="form-row">
+      <div><label class="fl">Buyer Name</label><input type="text" id="pos-buyer" placeholder="Customer"></div>
+      <div><label class="fl">Phone</label><input type="tel" id="pos-phone" placeholder="+91"></div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Link to Job (optional)</label><select id="pos-job"></select></div>
+      <div><label class="fl">Payment</label><select id="pos-method"><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option><option value="unpaid">Unpaid / Credit</option></select></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;border-top:1px solid var(--light);padding-top:12px;flex-wrap:wrap;gap:10px">
+      <div style="font-weight:800;font-size:16px">Total: <span id="pos-total" style="color:var(--green)">₹0.00</span></div>
+      <div class="btn-row"><button class="btn btn-gh" onclick="closeModal('pos-modal')">Cancel</button><button class="btn btn-pr" onclick="posComplete()">✓ Complete Sale</button></div>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="sales-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('sales-modal')">✕</button>
+    <h3>💰 Sales History</h3>
+    <div id="sales-list"></div>
+  </div>
+</div>
 <div id="welcome-ov">
   <div class="wc-card">
     <div class="wc-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
@@ -748,6 +780,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="wc-sub wc-el" id="wc-tag">Mobile &amp; Tablet Repair Tracker</div>
     <div class="wc-meta wc-el"><span id="wc-greet">Welcome</span><span class="dot">·</span><span id="wc-date"></span></div>
     <div class="wc-auth wc-el" style="margin-top:28px">
+      <input type="text" id="au-shop" class="wc-input" placeholder="Shop name (e.g. Tech Garage)" style="display:none;margin-bottom:10px" oninput="auClearErr()">
       <input type="email" id="au-email" class="wc-input" placeholder="Email" autocomplete="username" oninput="auClearErr()">
       <input type="password" id="au-pass" class="wc-input" placeholder="Password" autocomplete="current-password" style="margin-top:10px" oninput="auClearErr()" onkeydown="if(event.key==='Enter')doAuth()">
       <div class="wc-err" id="wc-err">error</div>
@@ -818,7 +851,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     </div>
     <div class="form-row">
       <div><label class="fl">Ready By (promised)</label><input type="date" id="e-readyby"></div>
-      <div><label class="fl">Payment Method</label><select id="e-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div>
+      <div><label class="fl">Payment Method</label><select id="e-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div><div><label class="fl">Assigned To</label><input type="text" id="e-assignedto" list="assignee-list" placeholder="Employee name"></div>
     </div>
     <div class="form-row">
       <div><label class="fl">Advance / Deposit ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-advance" placeholder="0.00"></div></div>
@@ -832,6 +865,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
         <label class="chk-lbl"><input type="checkbox" id="e-mmc"> MMC</label>
       </div>
     </div>
+    <div style="margin-bottom:10px"><label class="fl">Inventory Used (deducts stock)</label><div style="display:flex;gap:6px;align-items:center"><select id="e-invsel" style="flex:1"></select><input type="number" id="e-invqty" value="1" min="1" style="width:58px" title="Qty"><button type="button" class="btn btn-ol btn-sm" onclick="addInvUsed('e')">Add</button></div><div id="e-invused" class="prob-tags" style="margin-top:8px"></div></div>
     <div style="margin-bottom:4px"><label class="fl">Notes</label><textarea id="e-notes" rows="3" placeholder="Additional notes..."></textarea></div>
     <div style="margin-bottom:11px"><label class="fl">Photos</label><div><label class="btn btn-ol btn-sm" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📷 Add Photos<input type="file" accept="image/*" capture="environment" multiple onchange="onPhotoInput(this,'e')" style="display:none"></label></div><div id="e-photos" class="ph-grid" style="margin-top:10px"></div></div>
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveEdit()">💾 Save Changes</button><button class="btn btn-gh" onclick="closeEditModal()">Cancel</button></div>
@@ -945,7 +979,8 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 
 <!-- INVENTORY PAGE -->
 <div class="page" id="page-inventory">
-  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>Inventory <span class="ac">Control</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openInvScan()">▤ Scan Product</button></div>
+  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>Inventory <span class="ac">Control</span></h2><div class="sp"></div><button class="btn btn-gr btn-sm" onclick="openSalesLog()">💰 Sales</button><button class="btn btn-pr btn-sm" onclick="openPOS()">🛒 New Sale</button><button class="btn btn-ol btn-sm" onclick="openInvScan()">▤ Scan</button></div>
+  <div class="card" style="padding:12px 14px"><label class="fl">Barcode scanner (scan to add 1 to stock)</label><input type="text" id="inv-hwscan" placeholder="🔫 Click here, then scan a product barcode…" onkeydown="if(event.key==='Enter'){handleInvScan((this.value||'').trim());this.value='';}"></div>
   <div class="stats-grid">
     <div class="stat-card sc-blue"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-prod">0</div><div class="stat-label">Products</div></div></div>
     <div class="stat-card sc-green"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-units">0</div><div class="stat-label">Units in Stock</div></div></div>
@@ -1081,12 +1116,13 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     </div>
     <div class="form-row">
       <div><label class="fl">Ready By (promised)</label><input type="date" id="f-readyby"></div>
-      <div><label class="fl">Payment Method</label><select id="f-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div>
+      <div><label class="fl">Payment Method</label><select id="f-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div><div><label class="fl">Assigned To</label><input type="text" id="f-assignedto" list="assignee-list" placeholder="Employee name"><datalist id="assignee-list"></datalist></div>
     </div>
     <div class="form-row">
       <div><label class="fl">Advance / Deposit ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-advance" placeholder="0.00" min="0" step="0.01"></div></div>
       <div><label class="fl">Parts Cost ₹ (your cost)</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-partscost" placeholder="0.00" min="0" step="0.01"></div></div>
     </div>
+    <div style="margin-bottom:10px"><label class="fl">Inventory Used (deducts stock)</label><div style="display:flex;gap:6px;align-items:center"><select id="f-invsel" style="flex:1"></select><input type="number" id="f-invqty" value="1" min="1" style="width:58px" title="Qty"><button type="button" class="btn btn-ol btn-sm" onclick="addInvUsed('f')">Add</button></div><div id="f-invused" class="prob-tags" style="margin-top:8px"></div></div>
     <div><label class="fl">Notes</label><textarea id="f-notes" rows="3" placeholder="Additional notes..."></textarea></div>
   </div>
   <div class="btn-row"><button class="btn btn-pr" onclick="saveJob()">💾 Save Job</button><button class="btn btn-gh" onclick="cancelJob()">Cancel</button></div>
@@ -1361,13 +1397,14 @@ const SUPA_URL='https://ulcdlgxtoilvkbcmynsg.supabase.co';
 const SUPA_KEY='sb_publishable_R-HOcoFy8IoU8hy6EGrREQ_F5eQf4hs';
 let supa=null,CURRENT_UID=null,CURRENT_EMAIL=null,SUB=null,authMode='signin';
 let GS_ENABLED=false;
-const SYNC_KEYS=['tg_jobs_v3','tg_inventory','tg_bm','tg_bm_seed','tg_probs','tg_parts','tg_wa_tmpl','tg_wa_done_tmpl','tg_wa_time','tg_auto_wa','tg_shop','tg_ticket','tg_gs_url'];
+const SYNC_KEYS=['tg_jobs_v3','tg_inventory','tg_sales','tg_bm','tg_bm_seed','tg_probs','tg_parts','tg_wa_tmpl','tg_wa_done_tmpl','tg_wa_time','tg_auto_wa','tg_shop','tg_ticket','tg_gs_url','tg_deleted'];
 function supaInit(){try{if(window.supabase&&!supa){supa=window.supabase.createClient(SUPA_URL,SUPA_KEY);}}catch(e){}}
 window.onload=function(){ supaBoot(); };
 function bootRender(){
-  loadAll();loadInv();
+  loadAll();loadInv();if(typeof loadSales==='function')loadSales();
   var dd=document.getElementById('dash-date');if(dd)dd.textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
+  applyPendingShop();updateBranding();updateSubUI();buildAssigneeList();
   document.addEventListener('click',outClick);
   go('dashboard');renderDash();
   if(!window._cloudPollStarted){ window._cloudPollStarted=true;
@@ -1401,7 +1438,7 @@ async function onSignedIn(user){
 function showAuth(msg){var o=document.getElementById('welcome-ov');if(o)o.classList.remove('hide');var er=document.getElementById('wc-err');if(er){if(msg){er.textContent=msg;er.classList.add('show');}else{er.classList.remove('show');}}setTimeout(function(){var e=document.getElementById('au-email');if(e)e.focus();},150);}
 function hideAuth(){var o=document.getElementById('welcome-ov');if(o)o.classList.add('hide');}
 function auClearErr(){var er=document.getElementById('wc-err');if(er)er.classList.remove('show');}
-function auToggle(){authMode=(authMode==='signin')?'signup':'signin';var bl=document.getElementById('au-btn-label');if(bl)bl.textContent=authMode==='signin'?'Sign In':'Create Account';var tt=document.getElementById('au-toggle-txt');if(tt)tt.textContent=authMode==='signin'?'New shop?':'Already have an account?';var tg=document.getElementById('au-toggle');if(tg)tg.textContent=authMode==='signin'?'Create an account':'Sign in';var pf=document.getElementById('au-pass');if(pf)pf.setAttribute('autocomplete',authMode==='signin'?'current-password':'new-password');auClearErr();}
+function auToggle(){authMode=(authMode==='signin')?'signup':'signin';var bl=document.getElementById('au-btn-label');if(bl)bl.textContent=authMode==='signin'?'Sign In':'Create Account';var tt=document.getElementById('au-toggle-txt');if(tt)tt.textContent=authMode==='signin'?'New shop?':'Already have an account?';var tg=document.getElementById('au-toggle');if(tg)tg.textContent=authMode==='signin'?'Create an account':'Sign in';var pf=document.getElementById('au-pass');if(pf)pf.setAttribute('autocomplete',authMode==='signin'?'current-password':'new-password');var _sh=document.getElementById('au-shop');if(_sh)_sh.style.display=authMode==='signup'?'':'none';auClearErr();}
 async function doAuth(){
   var er=document.getElementById('wc-err');function fail(m){if(er){er.textContent=m;er.classList.add('show');}}
   if(!supa){return fail('Login service not loaded — refresh the page.');}
@@ -1411,9 +1448,10 @@ async function doAuth(){
   try{
     if(authMode==='signup'){
       if(pass.length<6){if(btn)btn.style.opacity='';return fail('Password must be at least 6 characters.');}
+      try{var _sn0=(document.getElementById('au-shop').value||'').trim();if(_sn0)localStorage.setItem('tg_pending_shop',_sn0);}catch(e){}
       const r=await supa.auth.signUp({email:email,password:pass});
       if(r.error)throw r.error;
-      if(r.data&&r.data.session&&r.data.user){ await onSignedIn(r.data.user); }
+      if(r.data&&r.data.session&&r.data.user){ await onSignedIn(r.data.user); var _sn=(document.getElementById('au-shop').value||'').trim(); if(_sn){ try{ if(typeof shop==='undefined'||!shop)shop={}; shop.name=_sn; lsSet('tg_shop',shop); updateBranding(); updateSubUI(); }catch(e){} } }
       else { fail('Account created! Check your email to confirm, then Sign In.'); authMode='signup';auToggle(); }
     } else {
       const r=await supa.auth.signInWithPassword({email:email,password:pass});
@@ -1425,7 +1463,7 @@ async function doAuth(){
 }
 function _isB64(u){return typeof u==='string'&&u.indexOf('data:')===0;}
 function _mergeJobs(localArr,cloudArr){
-  var map={};
+  var map={}; var del={}; try{(JSON.parse(localStorage.getItem('tg_deleted')||'[]')||[]).forEach(function(x){del[String(x)]=1;});}catch(e){}
   (Array.isArray(cloudArr)?cloudArr:[]).forEach(function(j){if(j&&j.id!=null)map[j.id]=j;});
   (Array.isArray(localArr)?localArr:[]).forEach(function(j){
     if(!j||j.id==null)return; var c=map[j.id];
@@ -1437,13 +1475,14 @@ function _mergeJobs(localArr,cloudArr){
     win.photos=urls.concat(b64.filter(function(u){return urls.indexOf(u)<0;}));
     map[j.id]=win;
   });
-  return Object.keys(map).map(function(k){return map[k];});
+  return Object.keys(map).filter(function(k){return !del[String(k)];}).map(function(k){return map[k];});
 }
 async function cloudPull(){
   const r=await supa.from('app_state').select('data').eq('user_id',CURRENT_UID).maybeSingle();
   const row=r?r.data:null;const cloudObj=row&&row.data?row.data:null;
   if(cloudObj&&Object.keys(cloudObj).length){
-    SYNC_KEYS.forEach(function(k){ if(k==='tg_jobs_v3')return; if(cloudObj[k]!==undefined&&cloudObj[k]!==null){ try{localStorage.setItem(k,typeof cloudObj[k]==='string'?cloudObj[k]:JSON.stringify(cloudObj[k]));}catch(e){} } });
+    SYNC_KEYS.forEach(function(k){ if(k==='tg_jobs_v3'||k==='tg_deleted')return; if(cloudObj[k]!==undefined&&cloudObj[k]!==null){ try{localStorage.setItem(k,typeof cloudObj[k]==='string'?cloudObj[k]:JSON.stringify(cloudObj[k]));}catch(e){} } });
+    try{ var _cd=cloudObj.tg_deleted; if(typeof _cd==='string')_cd=JSON.parse(_cd||'[]'); if(!Array.isArray(_cd))_cd=[]; var _ld=[]; try{_ld=JSON.parse(localStorage.getItem('tg_deleted')||'[]');}catch(e){} if(!Array.isArray(_ld))_ld=[]; var _sn={},_un=[]; _ld.concat(_cd).forEach(function(x){var kk=String(x);if(!_sn[kk]){_sn[kk]=1;_un.push(x);}}); localStorage.setItem('tg_deleted',JSON.stringify(_un)); }catch(e){}
     try{
       var cj=cloudObj.tg_jobs_v3; if(typeof cj==='string')cj=JSON.parse(cj||'[]'); if(!Array.isArray(cj))cj=[];
       var lj=[]; try{lj=JSON.parse(localStorage.getItem('tg_jobs_v3')||'[]');}catch(e){} if(!Array.isArray(lj))lj=[];
@@ -1488,7 +1527,10 @@ async function migratePhotos(){
 }
 async function cloudSyncNow(){ if(!supa||!CURRENT_UID){return;} try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); await cloudPush(); await cloudPull(); loadAll();loadInv();renderDash();if(typeof renderList==='function')renderList(); if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); } }
 async function loadSub(){ try{ const r=await supa.from('subscriptions').select('*').eq('user_id',CURRENT_UID).maybeSingle(); SUB=r?r.data:null; updateSubUI(); }catch(e){} }
-function updateSubUI(){ var el=document.getElementById('pf-sub'); if(!el)return; if(SUB){ el.textContent=(SUB.plan||'trial')+' · '+(SUB.status||''); } else { el.textContent=CURRENT_EMAIL||'Signed in'; } }
+function updateSubUI(){ var nm=document.getElementById('pf-name'); if(nm) nm.textContent=(typeof shop!=='undefined'&&shop&&shop.name)?shop.name:(CURRENT_EMAIL||'Repair Tracker'); var el=document.getElementById('pf-sub'); if(el){ el.textContent=CURRENT_EMAIL||'Signed in'; } }
+function updateBranding(){ try{ var b=document.getElementById('brand-name'); if(b) b.textContent=(typeof shop!=='undefined'&&shop&&shop.name)?shop.name:'Repair Tracker'; }catch(e){} }
+function applyPendingShop(){ try{ var pnd=localStorage.getItem('tg_pending_shop'); if(pnd){ localStorage.removeItem('tg_pending_shop'); if(typeof shop==='undefined'||!shop)shop={}; shop.name=pnd; lsSet('tg_shop',shop); } }catch(e){} }
+function buildAssigneeList(){ var dl=document.getElementById('assignee-list'); if(!dl)return; var set={}; (typeof jobs!=='undefined'&&Array.isArray(jobs)?jobs:[]).forEach(function(j){ if(j&&j.assignedTo)set[j.assignedTo]=1; }); dl.innerHTML=Object.keys(set).map(function(n){return '<option value="'+e(n)+'">';}).join(''); }
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open')}
 function openSettings(){document.getElementById('settings-modal').classList.add('open')}
 function toggleProfileMenu(){var m=document.getElementById('profile-menu');if(m)m.classList.toggle('open')}
@@ -1497,8 +1539,8 @@ function openChangePass(){var pm=document.getElementById('profile-menu');if(pm)p
 async function saveNewPass(){var nw=document.getElementById('pm-new').value,nw2=document.getElementById('pm-new2').value;var er=document.getElementById('pass-err');function fail(m){er.textContent=m;er.style.display='block';}if(nw.length<6)return fail('New password must be at least 6 characters.');if(nw!==nw2)return fail('New passwords do not match.');if(!supa)return fail('Not connected to the login service.');try{var r=await supa.auth.updateUser({password:nw});if(r.error)throw r.error;closeModal('pass-modal');toast('Password updated');}catch(e){fail((e&&e.message)||'Could not update password.');}}
 var TK_KEYS=['showQR','showPhone','showAltPhone','showIMEI','showLock','showSIM','showProblems','showParts','showStatus','showPayment','showEstimate'];
 function _readTK(){var TK={title:document.getElementById('tk-title').value.trim(),thanks:document.getElementById('tk-thanks').value.trim(),terms:document.getElementById('tk-terms').value.trim()};TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);TK[k]=c?c.checked:true;});return TK;}
-function openTicketSettings(){var TK=lsGet('tg_ticket',{});document.getElementById('tk-title').value=TK.title||'';document.getElementById('tk-thanks').value=TK.thanks||'';document.getElementById('tk-terms').value=TK.terms||'';TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);if(c)c.checked=(TK[k]!==false);});document.getElementById('ticket-modal').classList.add('open');}
-function saveTicketSettings(){lsSet('tg_ticket',_readTK());toast('Ticket layout saved');closeModal('ticket-modal');}
+function openTicketSettings(){var TK=lsGet('tg_ticket',{});document.getElementById('tk-title').value=TK.title||'';document.getElementById('tk-thanks').value=TK.thanks||'';document.getElementById('tk-terms').value=TK.terms||'';var _sh=(typeof shop!=='undefined'&&shop)?shop:{};document.getElementById('tk-shop').value=_sh.name||'';document.getElementById('tk-contact').value=_sh.phone||'';document.getElementById('tk-address').value=_sh.addr||'';document.getElementById('tk-gst').value=_sh.gst||'';TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);if(c)c.checked=(TK[k]!==false);});document.getElementById('ticket-modal').classList.add('open');}
+function saveTicketSettings(){lsSet('tg_ticket',_readTK());try{if(typeof shop==='undefined'||!shop)shop={};var _n=document.getElementById('tk-shop').value.trim();if(_n)shop.name=_n;shop.phone=document.getElementById('tk-contact').value.trim();shop.addr=document.getElementById('tk-address').value.trim();shop.gst=document.getElementById('tk-gst').value.trim();lsSet('tg_shop',shop);if(typeof updateBranding==='function')updateBranding();if(typeof updateSubUI==='function')updateSubUI();}catch(e){}toast('Ticket & shop details saved');closeModal('ticket-modal');}
 function previewTicket(){lsSet('tg_ticket',_readTK());if(jobs&&jobs.length){var jj=(typeof sortedJobs==='function')?sortedJobs():jobs;genTicket(jj[0].id);}else{toast('Add a job first to preview the ticket','info');}}
 document.addEventListener('click',function(ev){var pm=document.getElementById('profile-menu');if(pm&&pm.classList.contains('open')&&!ev.target.closest('#profile-menu')&&!ev.target.closest('[aria-label=\"Profile\"]')){pm.classList.remove('open');}});
 function wcInit(){try{
@@ -1561,7 +1603,7 @@ function getOutstandingJobs(){
   const now=new Date();
   const revSort=document.getElementById('rev-sort')?.value||'newest';
   return jobs.filter(j=>{
-    if(j.pay==='paid'||j.s==='returned')return false;
+    if(j.pay==='paid'||j.s!=='done')return false;
     const d=new Date(j.dt);if(isNaN(d))return false;
     if(revPeriod==='all')return true;
     if(revPeriod==='day')return d.toDateString()===now.toDateString();
@@ -1619,7 +1661,7 @@ function showCustomerHistory(kind,val){
 function openNewJob(){reset();go('newJob');autoJno();if(typeof syncFromSheet==='function'){try{var _p=syncFromSheet(true);if(_p&&_p.then)_p.then(function(){if(jnoAuto&&document.getElementById('page-newJob').classList.contains('active'))autoJno()}).catch(function(){})}catch(e){}}}
 function reset(){
   jLocked=false;selBrand='';selModel='';selProbs=[];selParts=[];dtISO='';dtEdit=false;simAllState=false;
-  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','f-readyby','f-advance','f-partscost','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});var _fpm=document.getElementById('f-paymethod');if(_fpm)_fpm.value='';fPhotos=[];renderPhotoPreview('f');
+  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','f-readyby','f-advance','f-partscost','f-assignedto','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});var _fpm=document.getElementById('f-paymethod');if(_fpm)_fpm.value='';fPhotos=[];renderPhotoPreview('f');buildAssigneeList();fInvUsed=[];buildInvSelect('f');renderInvUsed('f');
   document.getElementById('f-cphone').value='+91 ';document.getElementById('f-cphone2').value='+91 ';document.getElementById('f-cphone2-wrap').style.display='none';document.getElementById('f-addnum').textContent='+ Add another number';
   const dt=document.getElementById('f-dt');dt.value='';dt.style.color='var(--dim)';
   document.getElementById('dte-wrap').style.display='none';document.getElementById('btn-dte').classList.remove('ed');document.getElementById('btn-dte').textContent='✏️';
@@ -1729,7 +1771,7 @@ function saveJob(){
     id:Date.now(),jno,imei:imei||'0',brand,model,probs:[...selProbs],parts:[...selParts],
     cname:document.getElementById('f-cname').value.trim(),cphone:phoneForStorage(document.getElementById('f-cphone').value),cphone2:phoneForStorage(document.getElementById('f-cphone2').value),
     est:document.getElementById('f-est').value||'0',
-    readyBy:document.getElementById('f-readyby').value||'',payMethod:document.getElementById('f-paymethod').value||'',advance:document.getElementById('f-advance').value||'0',partsCost:document.getElementById('f-partscost').value||'0',photos:[...fPhotos],
+    readyBy:document.getElementById('f-readyby').value||'',payMethod:document.getElementById('f-paymethod').value||'',advance:document.getElementById('f-advance').value||'0',partsCost:document.getElementById('f-partscost').value||'0',assignedTo:document.getElementById('f-assignedto').value.trim(),photos:[...fPhotos],inventoryUsed:[...fInvUsed],
     notes:document.getElementById('f-notes').value,
     s:document.getElementById('f-sts').value,pay:payStatus,paidAt:payStatus==='paid'?new Date().toISOString():'',
     lock:document.getElementById('f-lock').value,
@@ -1738,7 +1780,7 @@ function saveJob(){
     dt:dtISO||new Date().toISOString(),
     updatedAt:new Date().toISOString()
   };
-  jobs.unshift(job);saveJobs();updNC();
+  jobs.unshift(job);saveJobs();deductInvUsedNew();updNC();
   toast('Job #'+jno+' saved!');
   syncJobToSheet(job);
   sendWA(job);
@@ -1836,7 +1878,7 @@ function renderList(){
   </tr>`).join('')
 }
 function reSendWA(id){const j=jobs.find(j=>j.id===id);if(j)sendWA(j)}
-function deleteJob(id){if(!confirm('Delete this job?'))return;const now=new Date().toISOString();jobs=jobs.map(j=>j.id===id?{...j,deleted:true,updatedAt:now}:j).filter(j=>!j.deleted);saveJobs();syncDeleteToSheet(id);updNC();toast('Deleted.','error');renderList();renderDash();if(selJob===id){selJob=null;go('jobList')}}
+function deleteJob(id){if(!confirm('Delete this job?'))return;const now=new Date().toISOString();try{var _dl=JSON.parse(localStorage.getItem('tg_deleted')||'[]');if(!Array.isArray(_dl))_dl=[];if(_dl.indexOf(id)<0){_dl.push(id);lsSet('tg_deleted',_dl);}}catch(e){}try{if(supa&&CURRENT_UID)supa.from('jobs').delete().eq('user_id',CURRENT_UID).eq('job_id',String(id));}catch(e){}jobs=jobs.map(j=>j.id===id?{...j,deleted:true,updatedAt:now}:j).filter(j=>!j.deleted);saveJobs();syncDeleteToSheet(id);updNC();toast('Deleted.','error');renderList();renderDash();if(selJob===id){selJob=null;go('jobList')}}
 
 // ════════ JOB DETAIL ════════════════════════════════════════════
 function openDet(id){selJob=id;renderDet(jobs.find(j=>j.id===id));go('jobDetail')}
@@ -1866,7 +1908,7 @@ function renderDet(j){
   const locks={nil:'None',pin:'PIN',pattern:'Pattern',password:'Password'};
   const lockText=(locks[j.lock]||'None')+(j.lockValue?' ('+e(j.lockValue)+')':'');
   const sims=[j.sim1?'SIM 1':'',j.sim2?'SIM 2':'',j.mmc?'MMC':''].filter(Boolean).join(', ')||'None';
-  const _est=parseFloat(j.est)||0,_adv=parseFloat(j.advance)||0,_pc=parseFloat(j.partsCost)||0;const _bal=j.pay==='paid'?0:Math.max(0,_est-_adv);const _recv=j.pay==='paid'?_est:_adv;const _profit=_recv-_pc;const _pm={cash:'Cash',upi:'UPI',card:'Card'}[j.payMethod]||'—';
+  const _est=parseFloat(j.est)||0,_adv=parseFloat(j.advance)||0,_ivc=(typeof invUsedCost==='function'?invUsedCost(j):0),_pc=(parseFloat(j.partsCost)||0)+_ivc;const _bal=j.pay==='paid'?0:Math.max(0,_est-_adv);const _recv=j.pay==='paid'?_est:_adv;const _profit=_recv-_pc;const _pm={cash:'Cash',upi:'UPI',card:'Card'}[j.payMethod]||'—';
   document.getElementById('d-top').innerHTML=`
     <div class="df"><div class="dfl">Date &amp; Time</div><div class="dfv">${fDT(j.dt)}</div></div>
     <div class="df"><div class="dfl">Job No</div><div class="dfv ac">#${e(j.jno)}</div></div>
@@ -1875,7 +1917,7 @@ function renderDet(j){
     <div class="df"><div class="dfl">IMEI</div><div class="dfv" style="font-size:11px;word-break:break-all">${e(j.imei)||'—'}</div></div>
     <div class="df"><div class="dfl">Device Lock</div><div class="dfv">${lockText}</div></div>
     <div class="df"><div class="dfl">SIM / Storage</div><div class="dfv">${sims}</div></div>
-    <div class="df"><div class="dfl">Payment</div><div class="dfv"><span class="pay-badge pay-${j.pay||'unpaid'}" onclick="togField(${j.id},'pay')" style="cursor:pointer">${j.pay==='paid'?'✓ Paid':'✗ Unpaid'}</span></div></div>${j.readyBy?`<div class="df"><div class="dfl">Ready By</div><div class="dfv" style="${isOverdue(j)?'color:var(--red);font-weight:800':''}">${fD(j.readyBy)}${isOverdue(j)?' ⚠':''}</div></div>`:''}${j.payMethod?`<div class="df"><div class="dfl">Method</div><div class="dfv">${_pm}</div></div>`:''}${(_adv>0)?`<div class="df"><div class="dfl">Advance Paid</div><div class="dfv" style="color:var(--green)">₹${fR(_adv)}</div></div>`:''}${(_bal>0)?`<div class="df"><div class="dfl">Balance Due</div><div class="dfv" style="color:var(--red)">₹${fR(_bal)}</div></div>`:''}${(_pc>0)?`<div class="df"><div class="dfl">Parts Cost</div><div class="dfv">₹${fR(_pc)}</div></div>`:''}${(_pc>0||_adv>0)?`<div class="df"><div class="dfl">Profit</div><div class="dfv" style="color:${_profit>=0?'var(--green)':'var(--red)'}">₹${fR(_profit)}</div></div>`:''}`;
+    <div class="df"><div class="dfl">Payment</div><div class="dfv"><span class="pay-badge pay-${j.pay||'unpaid'}" onclick="togField(${j.id},'pay')" style="cursor:pointer">${j.pay==='paid'?'✓ Paid':'✗ Unpaid'}</span></div></div>${j.readyBy?`<div class="df"><div class="dfl">Ready By</div><div class="dfv" style="${isOverdue(j)?'color:var(--red);font-weight:800':''}">${fD(j.readyBy)}${isOverdue(j)?' ⚠':''}</div></div>`:''}${j.payMethod?`<div class="df"><div class="dfl">Method</div><div class="dfv">${_pm}</div></div>`:''}${j.assignedTo?`<div class="df"><div class="dfl">Assigned To</div><div class="dfv">${e(j.assignedTo)}</div></div>`:''}${(_adv>0)?`<div class="df"><div class="dfl">Advance Paid</div><div class="dfv" style="color:var(--green)">₹${fR(_adv)}</div></div>`:''}${(_bal>0)?`<div class="df"><div class="dfl">Balance Due</div><div class="dfv" style="color:var(--red)">₹${fR(_bal)}</div></div>`:''}${(_pc>0)?`<div class="df"><div class="dfl">Parts Cost</div><div class="dfv">₹${fR(_pc)}</div></div>`:''}${(_pc>0||_adv>0)?`<div class="df"><div class="dfl">Profit</div><div class="dfv" style="color:${_profit>=0?'var(--green)':'var(--red)'}">₹${fR(_profit)}</div></div>`:''}`;
   document.getElementById('d-main').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:20px">
     <div><div class="card-title" style="margin-bottom:3px">Brand</div><div style="font-size:14px;font-weight:700">${e(j.brand)}</div></div>
     <div><div class="card-title" style="margin-bottom:3px">Model</div><div style="font-size:14px;font-weight:700">${e(j.model)}</div></div>
@@ -1903,7 +1945,7 @@ function openEditModal(id){
   document.getElementById('e-b-lbl').textContent=eSelBrand||'Select Brand';document.getElementById('e-m-lbl').textContent=eSelModel||'Select Model';
   updPLbl('e');
   updPartLbl('e');
-  document.getElementById('e-est').value=j.est||'';document.getElementById('e-readyby').value=j.readyBy||'';document.getElementById('e-paymethod').value=j.payMethod||'';document.getElementById('e-advance').value=j.advance||'';document.getElementById('e-partscost').value=j.partsCost||'';ePhotos=[...(j.photos||[])];renderPhotoPreview('e');document.getElementById('e-lock').value=j.lock||'nil';document.getElementById('e-lock-value').value=j.lockValue||'';toggleLockValue('e');document.getElementById('e-pay').value=j.pay||'unpaid';
+  document.getElementById('e-est').value=j.est||'';document.getElementById('e-readyby').value=j.readyBy||'';document.getElementById('e-paymethod').value=j.payMethod||'';document.getElementById('e-advance').value=j.advance||'';document.getElementById('e-partscost').value=j.partsCost||'';document.getElementById('e-assignedto').value=j.assignedTo||'';buildAssigneeList();eInvUsed=[...(j.inventoryUsed||[])];eInvUsedOrig=JSON.parse(JSON.stringify(j.inventoryUsed||[]));buildInvSelect('e');renderInvUsed('e');ePhotos=[...(j.photos||[])];renderPhotoPreview('e');document.getElementById('e-lock').value=j.lock||'nil';document.getElementById('e-lock-value').value=j.lockValue||'';toggleLockValue('e');document.getElementById('e-pay').value=j.pay||'unpaid';
   document.getElementById('e-sim1').checked=!!j.sim1;document.getElementById('e-sim2').checked=!!j.sim2;document.getElementById('e-mmc').checked=!!j.mmc;
   document.getElementById('e-sts').value=j.s||'pending';document.getElementById('e-notes').value=j.notes||'';
   document.getElementById('e-dte-wrap').style.display='none';document.getElementById('e-dte-btn').classList.remove('ed');document.getElementById('e-dte-btn').textContent='✏️';
@@ -1919,8 +1961,8 @@ function saveEdit(){
   const newJno=document.getElementById('e-jno').value.trim();
   if(!newJno){toast('Job number required','error');return}
   if(jobs.find(j=>j.id!==eJobId&&j.jno===newJno)){toast('Job number already exists!','error');return}
-  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),cphone2:phoneForStorage(document.getElementById('e-cphone2').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',readyBy:document.getElementById('e-readyby').value||'',payMethod:document.getElementById('e-paymethod').value||'',advance:document.getElementById('e-advance').value||'0',partsCost:document.getElementById('e-partscost').value||'0',photos:[...ePhotos],notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
-  jobs=updJob;saveJobs();
+  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),cphone2:phoneForStorage(document.getElementById('e-cphone2').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',readyBy:document.getElementById('e-readyby').value||'',payMethod:document.getElementById('e-paymethod').value||'',advance:document.getElementById('e-advance').value||'0',partsCost:document.getElementById('e-partscost').value||'0',assignedTo:document.getElementById('e-assignedto').value.trim(),photos:[...ePhotos],inventoryUsed:[...eInvUsed],notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
+  jobs=updJob;saveJobs();applyInvUsedDelta();
   const updated=jobs.find(j=>j.id===eJobId);if(updated)syncJobToSheet(updated);
   closeEditModal();toast('Job updated!');if(selJob===eJobId)renderDet(jobs.find(j=>j.id===eJobId));renderDash();renderList();
 }
@@ -1950,6 +1992,7 @@ function openShopSettings(){document.getElementById('sh-name').value=shop.name||
 function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);var _gu=document.getElementById('sh-gsurl');if(_gu){var _v=_gu.value.trim();if(_v&&_v!==GS_URL){GS_URL=_v;try{localStorage.setItem('tg_gs_url',_v)}catch(e){}}}document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!');try{syncFromSheet(true)}catch(e){}}
 
 // ════════ JOB TICKET (80mm thermal) ══════════════════════════════
+function makeBarcodeDataURL(text){try{if(window.JsBarcode){var c=document.createElement('canvas');JsBarcode(c,String(text||'0'),{format:'CODE128',displayValue:true,fontSize:15,height:48,width:2,margin:6});return c.toDataURL('image/png');}}catch(e){}return '';}
 function makeQRDataURL(text){
   try{
     if(typeof QRCode==='undefined')return'';
@@ -1965,7 +2008,7 @@ function genTicket(id){
   const j=jobs.find(x=>x.id===id);
   if(!j){toast('Job not found','error');return}
   const TK=lsGet('tg_ticket',{});
-  const qr=makeQRDataURL(j.jno||'');
+  const qr=makeBarcodeDataURL(j.jno||'');
   const locks={nil:'',pin:'PIN',pattern:'Pattern',password:'Password'};
   const lockTxt=j.lock&&j.lock!=='nil'?(locks[j.lock]||'')+(j.lockValue?' • '+e(j.lockValue):''):'';
   const sims=[j.sim1?'SIM 1':'',j.sim2?'SIM 2':'',j.mmc?'MMC':''].filter(Boolean).join(', ');
@@ -2008,7 +2051,7 @@ html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Ar
   <div class="c sec">${e(TK.title||'Repair Job Ticket')}</div>
   <div class="c big">Job #${e(j.jno)}</div>
   <div class="c meta">${fDT(j.dt)}</div>
-  ${(qr&&TK.showQR!==false)?`<img class="qr" src="${qr}" width="120" height="120" alt="QR">`:''}
+  ${(qr&&TK.showQR!==false)?`<img class="bc" src="${qr}" alt="barcode" style="display:block;margin:8px auto 2px;max-width:70mm;height:auto">`:''}
   <div class="c meta">Job No: ${e(j.jno)}</div>
   <hr class="hr">
   <div class="row"><span class="k">Customer</span><span class="v">${e(j.cname||'—')}</span></div>
@@ -2271,17 +2314,40 @@ function printLabel(id){
 }
 function exportInv(){var blob=new Blob([JSON.stringify(inventory,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='inventory-backup.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1200);toast('Inventory backup downloaded');}
 function importInv(inp){var f=inp.files&&inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{var arr=JSON.parse(e.target.result);if(!Array.isArray(arr))throw 0;inventory=arr;saveInv();renderInv();toast('Restored '+arr.length+' products');}catch(err){toast('Invalid backup file','error');}};r.readAsText(f);inp.value='';}
+/* ===== STAGE 2C: POINT OF SALE + INVENTORY USED ===== */
+var salesArr=[],posCart=[],fInvUsed=[],eInvUsed=[],eInvUsedOrig=[];
+function loadSales(){try{salesArr=lsGet('tg_sales',[])||[];if(!Array.isArray(salesArr))salesArr=[];}catch(e){salesArr=[];}}
+function openPOS(){posCart=[];posBuyerReset();posPopulateJobs();posRenderCart();document.getElementById('pos-modal').classList.add('open');setTimeout(function(){var i=document.getElementById('pos-scan');if(i)i.focus();},120);}
+function posBuyerReset(){['pos-buyer','pos-phone'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});var pm=document.getElementById('pos-method');if(pm)pm.value='cash';}
+function posPopulateJobs(){var sel=document.getElementById('pos-job');if(!sel)return;sel.innerHTML='<option value="">Not linked to a job</option>'+(jobs||[]).slice(0,200).map(function(j){return '<option value="'+escI(String(j.id))+'">#'+escI(j.jno)+' · '+escI(j.cname||'—')+'</option>';}).join('');}
+function posScanEnter(ev){if(ev.key!=='Enter')return;ev.preventDefault();var el=document.getElementById('pos-scan');var v=(el.value||'').trim();if(v)posAddByCode(v);el.value='';}
+function posAddByCode(code){var lc=code.toLowerCase();var p=(inventory||[]).find(function(x){return (x.barcode||'').toLowerCase()===lc;})||(inventory||[]).find(function(x){return (x.name||'').toLowerCase()===lc;})||(inventory||[]).find(function(x){return (x.name||'').toLowerCase().indexOf(lc)>=0||(x.barcode||'').toLowerCase().indexOf(lc)>=0;});if(!p){toast('No product matches "'+code+'"','error');return;}posAddProduct(p);}
+function posAddProduct(p){var ex=posCart.find(function(c){return String(c.pid)===String(p.id);});if(ex){ex.qty=(parseInt(ex.qty)||0)+1;}else{posCart.push({pid:p.id,name:p.name,barcode:p.barcode||'',qty:1,price:parseFloat(p.price)||0,cost:parseFloat(p.cost)||0,stock:parseInt(p.qty)||0});}posRenderCart();}
+function posSetQty(i,q){q=parseInt(q)||0;if(q<=0){posCart.splice(i,1);}else{posCart[i].qty=q;}posRenderCart();}
+function posSetPrice(i,pr){posCart[i].price=parseFloat(pr)||0;posRenderCart();}
+function posRemove(i){posCart.splice(i,1);posRenderCart();}
+function posTotal(){return posCart.reduce(function(a,c){return a+(parseFloat(c.price)||0)*(parseInt(c.qty)||0);},0);}
+function posRenderCart(){var box=document.getElementById('pos-cart');if(!box)return;if(!posCart.length){box.innerHTML='<div class="empty" style="padding:16px">Scan or search a product to add it to the sale.</div>';}else{box.innerHTML=posCart.map(function(c,i){return '<div class="pos-row"><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escI(c.name)+'</div><div style="font-size:10px;color:var(--muted)">'+escI(c.barcode||'')+' · stock '+c.stock+'</div></div><input type="number" min="1" value="'+c.qty+'" onchange="posSetQty('+i+',this.value)" style="width:50px;text-align:center"><div class="rp-wrap" style="width:88px"><div class="rp-sym">₹</div><input type="number" min="0" step="0.01" value="'+c.price+'" onchange="posSetPrice('+i+',this.value)"></div><div style="width:72px;text-align:right;font-weight:800;color:var(--green)">₹'+fR((parseFloat(c.price)||0)*(parseInt(c.qty)||0))+'</div><button class="btn btn-sm btn-re" onclick="posRemove('+i+')">✕</button></div>';}).join('');}var t=document.getElementById('pos-total');if(t)t.textContent='₹'+fR(posTotal());}
+function posComplete(){if(!posCart.length){toast('Add at least one item','error');return;}var now=new Date().toISOString();var sale={id:'s'+Date.now().toString(36)+Math.floor(Math.random()*900+100),at:now,items:posCart.map(function(c){return {pid:c.pid,name:c.name,barcode:c.barcode,qty:parseInt(c.qty)||0,price:parseFloat(c.price)||0,cost:parseFloat(c.cost)||0};}),total:posTotal(),buyer:(document.getElementById('pos-buyer').value||'').trim(),phone:phoneForStorage(document.getElementById('pos-phone').value||''),jobId:(document.getElementById('pos-job').value||'').trim(),method:document.getElementById('pos-method').value||''};posCart.forEach(function(c){var p=(inventory||[]).find(function(x){return String(x.id)===String(c.pid);});if(p){p.qty=Math.max(0,(parseInt(p.qty)||0)-(parseInt(c.qty)||0));p.updated=Date.now();}});saveInv();renderInv();salesArr.unshift(sale);lsSet('tg_sales',salesArr);if(supa&&CURRENT_UID){try{supa.from('sales').insert({user_id:CURRENT_UID,sold_at:now,product_name:sale.items.map(function(x){return x.name;}).join(', '),qty:sale.items.reduce(function(a,x){return a+(parseInt(x.qty)||0);},0),total:sale.total,buyer_name:sale.buyer||null,buyer_phone:sale.phone||null,job_id:sale.jobId||null,payment_method:sale.method||null,data:sale});}catch(e){}}toast('Sale recorded — ₹'+fR(sale.total));closeModal('pos-modal');}
+function openSalesLog(){renderSalesLog();document.getElementById('sales-modal').classList.add('open');}
+function renderSalesLog(){var box=document.getElementById('sales-list');if(!box)return;var arr=(salesArr||[]).slice(0,200);var tot=arr.reduce(function(a,s){return a+(parseFloat(s.total)||0);},0);var head='<div class="rev-summary" style="margin-bottom:12px"><div class="rev-sum-item"><div class="rev-sum-val">'+arr.length+'</div><div class="rev-sum-label">Sales</div></div><div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--green)">₹'+fR(tot)+'</div><div class="rev-sum-label">Total</div></div></div>';if(!arr.length){box.innerHTML=head+'<div class="empty">No sales recorded yet.</div>';return;}box.innerHTML=head+arr.map(function(s){var items=(s.items||[]).map(function(x){return escI(x.name)+' ×'+x.qty;}).join(', ');return '<div class="rr"><div><div class="rr-t">'+items+'</div><div class="rr-b">'+(s.buyer?escI(s.buyer)+' · ':'')+fDT(s.at)+(s.method?' · '+s.method:'')+'</div></div><div style="color:var(--green);font-weight:800;font-size:13px">₹'+fR(s.total)+'</div></div>';}).join('');}
+function invUsedArr(which){return which==='e'?eInvUsed:fInvUsed;}
+function buildInvSelect(which){var sel=document.getElementById(which+'-invsel');if(!sel)return;sel.innerHTML='<option value="">— Select part from inventory —</option>'+(inventory||[]).map(function(p){return '<option value="'+escI(String(p.id))+'">'+escI(p.name)+' (stock '+(parseInt(p.qty)||0)+' · ₹'+fR(p.price)+')</option>';}).join('');}
+function addInvUsed(which){var sel=document.getElementById(which+'-invsel');var pid=sel.value;if(!pid){toast('Pick a part','error');return;}var qty=parseInt(document.getElementById(which+'-invqty').value)||1;var p=(inventory||[]).find(function(x){return String(x.id)===String(pid);});if(!p)return;var arr=invUsedArr(which);var ex=arr.find(function(x){return String(x.pid)===String(pid);});if(ex){ex.qty=(parseInt(ex.qty)||0)+qty;}else{arr.push({pid:p.id,name:p.name,qty:qty,cost:parseFloat(p.cost)||0,price:parseFloat(p.price)||0});}renderInvUsed(which);sel.value='';document.getElementById(which+'-invqty').value='1';}
+function removeInvUsed(which,i){invUsedArr(which).splice(i,1);renderInvUsed(which);}
+function renderInvUsed(which){var arr=invUsedArr(which);var box=document.getElementById(which+'-invused');if(!box)return;box.innerHTML=arr.map(function(x,i){return '<span class="ptag">'+escI(x.name)+' ×'+x.qty+' <span class="ptag-x" onclick="removeInvUsed(\''+which+'\','+i+')">✕</span></span>';}).join('');}
+function deductInvUsedNew(){fInvUsed.forEach(function(u){var p=(inventory||[]).find(function(x){return String(x.id)===String(u.pid);});if(p){p.qty=Math.max(0,(parseInt(p.qty)||0)-(parseInt(u.qty)||0));p.updated=Date.now();}});if(fInvUsed.length){saveInv();}}
+function applyInvUsedDelta(){var om={},nm={};eInvUsedOrig.forEach(function(u){om[u.pid]=(om[u.pid]||0)+(parseInt(u.qty)||0);});eInvUsed.forEach(function(u){nm[u.pid]=(nm[u.pid]||0)+(parseInt(u.qty)||0);});var all={};Object.keys(om).forEach(function(k){all[k]=1;});Object.keys(nm).forEach(function(k){all[k]=1;});var changed=false;Object.keys(all).forEach(function(pid){var delta=(nm[pid]||0)-(om[pid]||0);if(delta!==0){var p=(inventory||[]).find(function(x){return String(x.id)===String(pid);});if(p){p.qty=Math.max(0,(parseInt(p.qty)||0)-delta);p.updated=Date.now();changed=true;}}});if(changed)saveInv();}
+function invUsedCost(j){return ((j&&j.inventoryUsed)||[]).reduce(function(a,x){return a+(parseFloat(x.cost)||0)*(parseInt(x.qty)||0);},0);}
 function testSync(){
   var el=document.getElementById('sh-gsurl');
   var u=(el?el.value.trim():'')||GS_URL;
   var st=document.getElementById('sh-gsurl-status');
   if(st){st.style.color='var(--muted)';st.textContent='Testing connection…';}
   fetch(u+(u.indexOf('?')>=0?'&':'?')+'action=read').then(function(r){return r.json()}).then(function(d){
-    if(d&&d.ok){if(st){st.style.color='var(--green)';st.textContent='✓ Connected! Found '+((d.jobs&&d.jobs.length)||0)+' row(s). Press Save to use this URL.';}}
-    else{if(st){st.style.color='var(--red)';st.textContent='✗ URL reached but it did not return valid data. Check the Apps Script doGet code & deployment.';}}
-  }).catch(function(e){if(st){st.style.color='var(--red)';st.textContent='✗ Could not reach the URL. Make sure it ends in /exec and access is set to “Anyone”.';}});
+    if(d&&d.ok){if(st){st.style.color='var(--green)';st.textContent='Connected! Found '+((d.jobs&&d.jobs.length)||0)+' row(s).';}}
+    else{if(st){st.style.color='var(--red)';st.textContent='URL reached but returned no valid data.';}}
+  }).catch(function(e){if(st){st.style.color='var(--red)';st.textContent='Could not reach the URL.';}});
 }
 </script>
-
-
 </body></html>
