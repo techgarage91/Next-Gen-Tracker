@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Spinner } from "./components/ui";
@@ -30,7 +30,7 @@ export default function App() {
   return (
     <AuthProvider>
       <Toaster theme="dark" position="top-right" toastOptions={{ style: { background: "#121216", border: "1px solid #1E1E24", color: "#fff", fontFamily: "JetBrains Mono, monospace", borderRadius: 0 } }} />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<PublicOnly><Auth /></PublicOnly>} />
@@ -42,7 +42,7 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
