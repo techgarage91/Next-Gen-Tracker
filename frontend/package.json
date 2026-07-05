@@ -58,12 +58,15 @@
     "tailwind-merge": "3.2.0",
     "tailwindcss-animate": "1.0.7",
     "vaul": "1.1.2",
-    "zod": "3.24.4"
+    "zod": "3.24.4",
+    "@supabase/supabase-js": "2.45.4"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "predeploy": "craco build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [
@@ -92,7 +95,8 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "globals": "15.15.0",
     "postcss": "8.5.10",
-    "tailwindcss": "3.4.17"
+    "tailwindcss": "3.4.17",
+    "gh-pages": "6.1.1"
   },
   "resolutions": {
     "react-router": "7.15.0",
@@ -137,5 +141,6 @@
     "**/jest-util/picomatch": "2.3.2",
     "**/tinyglobby/picomatch": "4.0.4"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "homepage": "."
 }
